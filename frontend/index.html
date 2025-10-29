@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧠 Agente Organizador de Agenda IA Local</title>
+
+  <!-- ✅ FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+  <!-- ✅ Estilos -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>🧠 Agente Organizador de Agenda IA Local</h1>
+
+  <div class="top-controls">
+    <button id="btnSugerir">💡 Sugerir horarios</button>
+    <button id="btnRecargar">🔄 Recargar</button>
+  </div>
+
+  <div id="sugerencia"></div>
+
+  <!-- ✅ Calendario principal -->
+  <div id="calendar"></div>
+
+  <!-- ✅ Ventana Modal para agregar tarea -->
+  <div id="modal">
+    <div class="modal-content">
+      <h3>➕ Nueva Tarea</h3>
+      <label>Título:</label>
+      <input type="text" id="nombre" placeholder="Ej: Entrega de proyecto" required>
+
+      <label>Prioridad (1-5):</label>
+      <input type="number" id="prioridad" min="1" max="5" value="3">
+
+      <label>Duración (minutos):</label>
+      <input type="number" id="duracion" min="15" step="15" value="60">
+
+      <input type="hidden" id="fecha">
+      <input type="hidden" id="hora">
+
+      <div class="modal-actions">
+        <button id="btnGuardar">Guardar</button>
+        <button id="btnCancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       ORDEN CORRECTO DE SCRIPTS
+       ============================== -->
+
+  <!-- Librería de FullCalendar -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <!-- Script principal (calendario y modal) -->
+  <script src="app.js"></script>
+
+  <!-- Chatbot flotante -->
+  <script src="chatbot.js"></script>
+</body>
+</html>

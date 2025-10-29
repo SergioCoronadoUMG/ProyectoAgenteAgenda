@@ -1,0 +1,235 @@
+/* ===============================
+   ESTILOS GLOBALES — AGENDA IA
+   =============================== */
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f4f6f8;
+  text-align: center;
+  padding: 20px;
+  color: #1e1e1e;
+  margin: 0;
+}
+
+h1 {
+  color: #1565c0;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.top-controls {
+  margin-bottom: 15px;
+}
+
+button {
+  background-color: #1565c0;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  margin: 0 6px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0d47a1;
+}
+
+/* ====== CONTENEDOR DE SUGERENCIAS ====== */
+#sugerencia {
+  margin: 20px auto;
+  max-width: 700px;
+  background: #e3f2fd;
+  padding: 10px 15px;
+  border-radius: 8px;
+  text-align: left;
+  white-space: pre-line;
+  font-size: 15px;
+}
+
+/* ====== CALENDARIO RESPONSIVE ====== */
+#calendar {
+  margin-top: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 10px;
+  min-height: 650px;        /* altura visible */
+  max-width: 95vw;          /* adapta al ancho de pantalla */
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  #calendar {
+    font-size: 12px;
+    min-height: 500px;
+  }
+  .fc-toolbar-title {
+    font-size: 16px !important;
+  }
+}
+
+/* ===============================
+   MODAL DE REGISTRO DE TAREAS
+   =============================== */
+#modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 90%;
+  max-width: 400px;
+  text-align: left;
+  animation: pop 0.2s ease forwards;
+}
+
+@keyframes pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #1565c0;
+  text-align: center;
+}
+
+.modal-content label {
+  display: block;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.modal-actions {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.modal-actions button {
+  margin: 0 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-actions #btnGuardar {
+  background-color: #1565c0;
+  color: white;
+  border: none;
+}
+
+.modal-actions #btnCancelar {
+  background-color: #ccc;
+  border: none;
+}
+
+/* ===============================
+   CHATBOT FLOTANTE (MODERNO)
+   =============================== */
+#chatbot-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  z-index: 10000;
+}
+
+#chatbot {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 25px;
+  width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+  overflow: hidden;
+  flex-direction: column;
+  font-family: "Segoe UI", sans-serif;
+  z-index: 9999;
+}
+
+.chat-header {
+  background: #1565c0;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#chat-body {
+  padding: 10px;
+  height: 280px;
+  overflow-y: auto;
+  font-size: 13px;
+  text-align: left;
+}
+
+#chat-input {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+#chat-input input {
+  flex: 1;
+  padding: 6px;
+  border: none;
+  outline: none;
+}
+
+#chat-input button {
+  background: #1565c0;
+  color: white;
+  border: none;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.msg {
+  margin: 4px 0;
+  padding: 6px 9px;
+  border-radius: 8px;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
+.msg.user {
+  background: #e3f2fd;
+  align-self: flex-end;
+}
+
+.msg.bot {
+  background: #f5f5f5;
+  align-self: flex-start;
+}

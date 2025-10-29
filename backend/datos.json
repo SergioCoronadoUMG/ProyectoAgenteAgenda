@@ -1,0 +1,20 @@
+[
+    {
+        "nombre": "prueba",
+        "hora": "13:30",
+        "prioridad": "5",
+        "fecha": "2025-10-29",
+        "duracion": "5",
+        "estado": "Programada",
+        "bitacora": []
+    },
+    {
+        "nombre": "prueba 2",
+        "hora": "17:30",
+        "prioridad": "5",
+        "fecha": "2025-10-29",
+        "duracion": "5",
+        "estado": "Programada",
+        "bitacora": []
+    }
+]
