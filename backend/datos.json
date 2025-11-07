@@ -1,20 +1,87 @@
 [
-    {
-        "nombre": "prueba",
-        "hora": "13:30",
-        "prioridad": "5",
-        "fecha": "2025-10-29",
-        "duracion": "5",
-        "estado": "Programada",
-        "bitacora": []
-    },
-    {
-        "nombre": "prueba 2",
-        "hora": "17:30",
-        "prioridad": "5",
-        "fecha": "2025-10-29",
-        "duracion": "5",
-        "estado": "Programada",
-        "bitacora": []
-    }
+  {
+    "nombre": "prueba",
+    "hora": "13:30",
+    "prioridad": "5",
+    "fecha": "2025-10-29",
+    "duracion": "5",
+    "estado": "Programada",
+    "bitacora": [],
+    "id": 1
+  },
+  {
+    "nombre": "prueba 2",
+    "hora": "17:30",
+    "prioridad": "5",
+    "fecha": "2025-10-29",
+    "duracion": "5",
+    "estado": "Programada",
+    "bitacora": [],
+    "id": 2
+  },
+  {
+    "id": 3,
+    "nombre": "prueba 3",
+    "fecha": "2025-10-29",
+    "hora": "17:30",
+    "duracion": 60,
+    "prioridad": 3,
+    "estado": "Programada",
+    "bitacora": []
+  },
+  {
+    "id": 4,
+    "nombre": "Entrega del proyecto qué tengo pendiente conflictos",
+    "fecha": "2025-11-07",
+    "hora": "02:00",
+    "duracion": 60,
+    "prioridad": 5,
+    "estado": "Programada",
+    "bitacora": []
+  },
+  {
+    "id": 5,
+    "nombre": "Reunión",
+    "fecha": "2025-11-03",
+    "hora": "03:00",
+    "duracion": 1140,
+    "prioridad": 3,
+    "estado": "Programada",
+    "bitacora": []
+  },
+  {
+    "id": 6,
+    "nombre": "Reunión",
+    "fecha": "2025-11-03",
+    "hora": "03:00",
+    "duracion": 30,
+    "prioridad": 3,
+    "estado": "Programada",
+    "bitacora": []
+  },
+  {
+    "id": 7,
+    "nombre": "Reunión",
+    "fecha": "2025-11-03",
+    "hora": "03:00",
+    "duracion": 30,
+    "prioridad": 3,
+    "estado": "Programada",
+    "bitacora": []
+  },
+  {
+    "id": 8,
+    "nombre": "prueba 5",
+    "fecha": "2025-11-07",
+    "hora": "09:00",
+    "duracion": 45,
+    "prioridad": 3,
+    "estado": "Programada",
+    "bitacora": [
+      {
+        "ts": "2025-11-06T19:26:11.149500",
+        "accion": "editar"
+      }
+    ]
+  }
 ]

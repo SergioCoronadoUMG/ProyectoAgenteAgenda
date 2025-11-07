@@ -1,62 +1,125 @@
+// frontend/chatbot.js
 document.addEventListener("DOMContentLoaded", () => {
-  // Botón flotante para abrir/cerrar el chatbot
-  const toggleBtn = document.createElement("button");
-  toggleBtn.id = "chatbot-btn";
-  toggleBtn.innerHTML = "🤖";
-  document.body.appendChild(toggleBtn);
+  console.log("✅ chatbot.js cargado");
 
-  // Ventana del chatbot
-  const chatBox = document.createElement("div");
-  chatBox.id = "chatbot";
-  chatBox.innerHTML = `
-    <div class="chat-header">🤖 Asistente de Agenda</div>
-    <div id="chat-body"></div>
-    <div id="chat-input">
-      <input type="text" placeholder="Escribe aquí... (ej: Ver pendientes)" />
-      <button>Enviar</button>
-    </div>
-  `;
-  document.body.appendChild(chatBox);
+  const API_BASE = "http://127.0.0.1:5000";
 
-  const body = document.getElementById("chat-body");
-  const input = chatBox.querySelector("input");
-  const button = chatBox.querySelector("button");
+  const chatContainer = document.getElementById("chat-container");
+  const chatBody = document.getElementById("chat-body");
+  const chatInput = document.getElementById("chat-input");
+  const chatButton = document.getElementById("chat-send");
+  const chatToggle = document.getElementById("chat-toggle");
 
-  // Mostrar u ocultar el chatbot
-  toggleBtn.addEventListener("click", () => {
-    chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
-    chatBox.style.flexDirection = "column";
+  // Abrir / cerrar chatbot
+  chatToggle.addEventListener("click", () => {
+    chatContainer.classList.toggle("open");
+    chatInput.focus();
   });
 
+  chatButton.addEventListener("click", sendMessage);
+  chatInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  // Mostrar mensajes
+  function appendMsg(sender, text) {
+    const msgDiv = document.createElement("div");
+    msgDiv.classList.add("msg", sender === "user" ? "msg-user" : "msg-bot");
+    msgDiv.textContent = text;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+
+  // Enviar texto al backend
   async function sendMessage() {
-    const text = input.value.trim();
+    const text = chatInput.value.trim();
     if (!text) return;
-
     appendMsg("user", text);
-    input.value = "";
+    chatInput.value = "";
 
-    if (/pendiente/i.test(text)) {
-      const res = await fetch("http://127.0.0.1:5000/asistente/pendientes");
-      const tareas = await res.json();
-      if (tareas.length === 0) appendMsg("bot", "✅ No tienes tareas pendientes.");
-      else appendMsg("bot", "Tareas pendientes:\n" + tareas.map(t => "• " + t.nombre + " (" + t.estado + ")").join("\n"));
-    } else if (/resumen/i.test(text)) {
-      const res = await fetch("http://127.0.0.1:5000/asistente/resumen");
-      const datos = await res.json();
-      appendMsg("bot", `📊 Estado actual:\n${Object.entries(datos).map(([k,v]) => `• ${k}: ${v}`).join("\n")}`);
-    } else {
-      appendMsg("bot", "Puedo mostrar tus tareas pendientes o el resumen de estados. Prueba escribir: 'Ver pendientes' o 'Ver resumen'.");
+    try {
+      const res = await fetch(`${API_BASE}/nlu`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ texto: text }),
+      });
+      const data = await res.json();
+      handleBotResponse(data);
+    } catch (err) {
+      console.error(err);
+      appendMsg("bot", "⚠️ Error procesando tu mensaje.");
     }
   }
 
-  function appendMsg(sender, text) {
-    const div = document.createElement("div");
-    div.className = `msg ${sender}`;
-    div.textContent = text;
-    body.appendChild(div);
-    body.scrollTop = body.scrollHeight;
+  // Procesar la respuesta del backend
+  function handleBotResponse(data) {
+    if (data.ayuda) {
+      appendMsg("bot", "📘 Comandos disponibles:\n- " + data.ayuda.join("\n- "));
+      return;
+    }
+
+    switch (data.accion) {
+      case "crear":
+        appendMsg("bot", `✅ Reunión registrada (#${data.tarea.id}): "${data.tarea.nombre}" ${data.tarea.fecha} ${data.tarea.hora}`);
+        if (data.conflictos?.total > 0)
+          appendMsg("bot", `⚠️ Hay ${data.conflictos.total} conflicto(s) detectado(s).`);
+        refreshCalendar();
+        break;
+
+      case "editar":
+        appendMsg("bot", `✏️ Reunión #${data.tarea.id} actualizada.`);
+        refreshCalendar();
+        break;
+
+      case "eliminar":
+        appendMsg("bot", data.ok ? `🗑️ Reunión eliminada (#${data.tarea_id})` : `❌ Error: ${data.error}`);
+        refreshCalendar();
+        break;
+
+      case "listar_pendientes":
+        if (data.datos.length === 0)
+          appendMsg("bot", "📭 No tienes reuniones pendientes.");
+        else {
+          const lista = data.datos
+            .map((t) => `• #${t.id} ${t.nombre} (${t.fecha} ${t.hora})`)
+            .join("\n");
+          appendMsg("bot", `📋 Pendientes:\n${lista}`);
+        }
+        break;
+
+      case "conflictos":
+        if (data.total === 0)
+          appendMsg("bot", "✅ No hay conflictos en la agenda.");
+        else {
+          const lista = data.conflictos.map((c) => `#${c.a} ↔ #${c.b}`).join(", ");
+          appendMsg("bot", `⚠️ Conflictos (${data.total}): ${lista}`);
+        }
+        break;
+
+      default:
+        appendMsg("bot", "🤖 No entendí. Escribe 'ayuda' para ver comandos.");
+        break;
+    }
   }
 
-  button.addEventListener("click", sendMessage);
-  input.addEventListener("keypress", (e) => { if (e.key === "Enter") sendMessage(); });
+  function refreshCalendar() {
+    try {
+      const calendar = FullCalendar.getCalendar(document.getElementById("calendar"));
+      if (calendar) calendar.refetchEvents();
+    } catch (e) {
+      console.warn("No se pudo refrescar el calendario:", e);
+    }
+  }
+
+  // Mensaje de bienvenida
+  appendMsg(
+    "bot",
+    "👋 ¡Hola! Soy tu asistente de agenda.\nPuedes decirme cosas como:\n" +
+      "• crear reunión mañana 15:00 por 60 min prioridad 2 nombre Plan semanal\n" +
+      "• editar 3 a hoy 16:00\n" +
+      "• eliminar 2\n" +
+      "• pendientes\n" +
+      "• conflictos\n" +
+      "• ayuda"
+  );
 });
